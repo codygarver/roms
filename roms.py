@@ -108,12 +108,12 @@ def generate_lists(console, base_dir):
     # Replace "Enhance" with "TEMPORARY" to guarantee "(En)" search result accuracy
     filelist = [file.replace('Enhance', 'TEMPORARY') for file in filelist]
 
-    # blacklist [b], (Beta), [BIOS], (Demo), (Program), (Proto), and (Sample)
+    # Blacklist [b], (Beta), [BIOS], (Demo), (Program), (Proto), and (Sample)
     regex_bios = ".*\[b\].*|.*\(.*Beta.*\).*|.*[Bb][Ii][Oo][Ss].*|.*\(.*Demo.*\).*|.*\(.*Program.*\).*|.*\(.*Proto.*\).*|.*\(.*Sample.*\).*"
     blacklist = list(
         filter(lambda v: re.match(regex_bios, v), filelist))
 
-    # blacklist files that are not (U), (USA), (World), (En)
+    # Blacklist files that are not (U), (USA), (World), (En)
     regex_not_english = "(?!.*\(U\).*)(?!.*\(.*USA.*\).*)(?!.*\(.*World.*\).*)(?!.*\(.*En.*\).*)"
     blacklist = blacklist + list(
         filter(lambda v: re.match(regex_not_english, v), filelist))
@@ -131,12 +131,12 @@ def generate_lists(console, base_dir):
     blacklist = sorted(
         list(dict.fromkeys(blacklist)))
 
-    # whitelist files that are not (Beta), [BIOS], (Demo), and (Program)
+    # Whitelist files that are not (Beta), [BIOS], (Demo), and (Program)
     regex_not_bios = "(?!.*\(.*Beta.*\).*)|(?!.*[Bb][Ii][Oo][Ss].*)|(?!.*\(.*Demo.*\).*)|(?!.*\(.*Program.*\).*)|(?!.*\(.*Proto.*\).*)"
     whitelist = list(
         filter(lambda v: re.match(regex_not_bios, v), filelist))
 
-    # whitelist files that are (U), (USA), (World), (En)
+    # Whitelist files that are (U), (USA), (World), (En)
     regex_english = ".*\(U\).*|.*\(.*USA.*\).*|.*\(.*World.*\).*|.*\(.*En.*\).*"
     whitelist = list(
         filter(lambda v: re.match(regex_english, v), whitelist))

@@ -11,7 +11,7 @@ These lists are produced in each console subdirectory:
 * `blacklist.auto.txt`
 * `whitelist.auto.txt`
 
-Lists content can be overridden by entries in `blacklist.custom.txt` and/or `whitelist.custom.txt`.
+Automatic list content can be overridden by entries in `blacklist.custom.txt` and/or `whitelist.custom.txt`.
 
 ### Transferring files
 
