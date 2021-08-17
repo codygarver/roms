@@ -132,7 +132,7 @@ def generate_lists(console, base_dir):
         list(dict.fromkeys(blacklist)))
 
     # Whitelist files that are not (Beta), [BIOS], (Demo), and (Program)
-    regex_not_bios = "(?!.*\(.*Beta.*\).*)|(?!.*[Bb][Ii][Oo][Ss].*)|(?!.*\(.*Demo.*\).*)|(?!.*\(.*Program.*\).*)|(?!.*\(.*Proto.*\).*)"
+    regex_not_bios = "(?!.*\[b\].*)|(?!.*\(.*Beta.*\).*)|(?!.*[Bb][Ii][Oo][Ss].*)|(?!.*\(.*Demo.*\).*)|(?!.*\(.*Program.*\).*)|(?!.*\(.*Proto.*\).*)|(?!.*\(.*Sample.*\).*)"
     whitelist = list(
         filter(lambda v: re.match(regex_not_bios, v), filelist))
 
