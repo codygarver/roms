@@ -3,7 +3,7 @@ Automatically filter video game roms using blacklists and whitelists and (option
 ## How it works
 roms.py uses filenames to determine characteristics of roms and whether or not they're desirable.
 
-For example, it automatically blacklists `BIOS`, `Program` and `Beta` files. And it has a Western bias, so it whitelists filenames that include `(U)` or `(USA)` or `En`. 
+For example, it automatically blacklists `[b]`, `(Beta)`, `[BIOS]`, `(Demo)`, `(Pirate)`, `(Program)`, `(Proto)`, and `(Sample)` files. And it has a Western bias, so it whitelists filenames that include `(U)` or `(USA)` or `En`. It also whitelists the greatest `(Rev)` version and blacklists inferior versions.
 
 ### Blacklists and Whitelists
 
