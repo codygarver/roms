@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import copy
 import logging
 import os
 import re
@@ -127,10 +128,6 @@ def generate_lists(console, base_dir):
         with open(blacklist_custom_path) as blacklist_custom:
             blacklist = blacklist + blacklist_custom.read().splitlines()
 
-    # Alphabetize and remove duplicates
-    blacklist = sorted(
-        list(dict.fromkeys(blacklist)))
-
     # Whitelist files that are not (Beta), [BIOS], (Demo), and (Program)
     regex_not_bios = "(?!.*\[b\].*)|(?!.*\(.*Beta.*\).*)|(?!.*[Bb][Ii][Oo][Ss].*)|(?!.*\(.*Demo.*\).*)|(?!.*\(.*Program.*\).*)|(?!.*\(.*Proto.*\).*)|(?!.*\(.*Sample.*\).*)"
     whitelist = list(
@@ -143,6 +140,81 @@ def generate_lists(console, base_dir):
 
     # Replace "TEMPORARY" with "Enhance"
     whitelist = [file.replace('TEMPORARY', 'Enhance') for file in whitelist]
+
+    # List filenames including Rev
+    regex_revision = ".*\(Rev.*\d\).*"
+
+    rev_files = list(
+        filter(lambda v: re.match(regex_revision, v), whitelist))
+
+    # Build dictionaries containing filenames and Revs
+    rev_dict_all = {}
+
+    for f in rev_files:
+        filename_without_rev = re.sub(
+            "\(Rev.*\d\)", "REPLACE_WITH_REV", f)
+
+        rev = re.findall("\(Rev.*\d\)", f)[0]
+
+        if filename_without_rev not in rev_dict_all:
+            rev_dict_all.update({filename_without_rev: {
+                "revisions": [rev]
+            }})
+        else:
+            rev_dict_all[filename_without_rev]["revisions"].append(
+                rev)
+
+    # Copy the dict because it's unsafe to modify the original data structure while iterating over it
+    rev_dict_min = copy.deepcopy(rev_dict_all)
+
+    # Whitelist greatest Revs
+    for filename in rev_dict_all:
+        # Get the greatest Rev and whitelist it
+        max_ver = max(rev_dict_all[filename]["revisions"])
+
+        game_file = re.sub(
+            "REPLACE_WITH_REV", max_ver, filename)
+
+        whitelist = whitelist + [game_file]
+
+        # Remove the greatest Rev from the minor Rev dictionary
+        rev_dict_min[filename]["revisions"].remove(
+            max(rev_dict_all[filename]["revisions"]))
+
+        # Get the filename without any Rev
+        game_file = re.sub(
+            " REPLACE_WITH_REV", "", filename)
+
+        # Confirm the reconstructed filename exists
+        if os.path.exists(console_path + "/" + game_file):
+            # Keep the whitelist in sync
+            try:
+                whitelist.remove(game_file)
+            except:
+                pass
+
+            # Blacklist the filename without any Rev
+            blacklist = blacklist + [game_file]
+
+    # Blacklist all inferior Revs
+    for filename in rev_dict_min:
+        for rev in rev_dict_min[filename]["revisions"]:
+            game_file = re.sub(
+                "REPLACE_WITH_REV", rev, filename)
+
+        # Confirm the reconstructed filename exists
+        if os.path.exists(console_path + "/" + game_file):
+            # Keep the whitelist in sync
+            try:
+                whitelist.remove(game_file)
+            except:
+                pass
+
+            blacklist = blacklist + [game_file]
+
+    # Alphabetize and remove duplicates
+    blacklist = sorted(
+        list(dict.fromkeys(blacklist)))
 
     # Subtract blacklist auto from whitelist auto
     whitelist = [item for item in whitelist if item not in blacklist]
