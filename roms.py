@@ -42,20 +42,28 @@ def copy_whitelisted_files(console, dest_dir, base_dir):
 
 
 def create_dir(console, path):
-    logging.warning(console + ": " + path + " does NOT exist, create it? y/N:")
-    create = input()
-    if create == "y" or create == "Y":
+
+    def mkdir(path):
         os.mkdir(path)
 
         if not os.path.isdir(path):
-            logging.critical(console + ": failed to create directory, exiting!: " +
-                             path)
-            exit(1)
+             logging.critical(console + ": failed to create directory, exiting!: " +
+                              path)
+             exit(1)
         else:
-            logging.info(console + ": created: " + path)
+             logging.info(console + ": created: " + path)
+
+    if not args.initialize:
+        logging.warning(console + ": " + path +
+                        " does NOT exist, create it? y/N:")
+        create = input()
+        if create == "y" or create == "Y":
+            mkdir(path)
+        else:
+            logging.critical(console + ": unable to proceed, exiting!")
+            exit(1)
     else:
-        logging.critical(console + ": unable to proceed, exiting!")
-        exit(1)
+        mkdir(path)
 
 
 def delete_blacklisted_files(console, dest_dir, base_dir):
@@ -266,6 +274,7 @@ if __name__ == "__main__":
     parser.add_argument("--base-dir")
     parser.add_argument("--console-name", required=True)
     parser.add_argument("--destination-dir")
+    parser.add_argument("--initialize", action='store_true')
     args = parser.parse_args()
 
     if not args.base_dir:

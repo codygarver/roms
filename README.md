@@ -15,6 +15,8 @@ Automatic list content can be overridden by entries in `blacklist.custom.txt` an
 
 ### Transferring files
 
+To avoid being prompted to create missing directories, also use `--initialize` when using `--destination-dir`.
+
 Local files will never be deleted _BUT_ using `--destination-dir` will delete remote files _IF_ they're contained in `blacklist.auto.txt`.
 
 ## Installation
@@ -30,3 +32,4 @@ Download [roms.py](https://raw.githubusercontent.com/codygarver/roms/main/roms.p
 ```
 3. (Optional) If you wish to override the automatically generated lists, add filenames to `blacklist.custom.txt` or `whitelist.custom.txt` and repeat Step 2. Changes will be reflected in `blacklist.auto.txt` and `whitelist.auto.txt`.
 4. (Optional) To copy the whitelisted files (and delete the blacklisted files) to another location, add `--destination-dir` to Step 2.
+5. (Optional) Automatically create missing destination directories unprompted by using `--initialize` with `--destination-dir`.
