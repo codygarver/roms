@@ -2,8 +2,10 @@
 
 import argparse
 import copy
+import hashlib
 import logging
 import os
+import pathlib
 import re
 import shutil
 import sys
@@ -17,26 +19,44 @@ def copy_whitelisted_files(console, dest_dir, base_dir):
     if not os.path.isdir(console_dest_dir):
         create_dir(console, console_dest_dir)
 
-    # Get list of destination files
-    dest_files = [f for f in os.listdir(
-        console_dest_dir) if os.path.isfile(os.path.join(console_dest_dir, f))]
-
     with open(whitelist_file) as f:
         whitelist = f.read().splitlines()
 
     # Copy whitelisted destination files
-    copy_list = [item for item in whitelist if item not in dest_files]
-    if len(copy_list) >= 1:
+    if len(whitelist) >= 1:
         logging.info(console + ": updating whitelisted files to " +
                      console_dest_dir + "...")
 
-        for f in copy_list:
-            file_name = os.path.join(console_dest_dir, f.rstrip())
-            if not os.path.isfile(file_name):
-                shutil.copy2(base_dir + "/" + console +
-                             "/" + f.rstrip(), file_name)
-                logging.info(console + ": copied " +
-                             f.rstrip())
+        def get_hash(file):
+            file_hash = hashlib.blake2b(pathlib.Path(
+                file).read_bytes()).hexdigest()
+
+            return file_hash
+
+        for f in whitelist:
+            dest_file = os.path.join(console_dest_dir + "/" + f.rstrip())
+            src_file = os.path.join(
+                base_dir + "/" + console + "/" + f.rstrip())
+
+            dest_hash = ""
+            src_hash = get_hash(src_file)
+            if os.path.isfile(dest_file):
+                dest_hash = get_hash(dest_file)
+
+            if not os.path.isfile(dest_file) or dest_hash != src_hash:
+                shutil.copy2(src_file, dest_file)
+
+                dest_hash = get_hash(dest_file)
+
+                if dest_hash == src_hash:
+                    logging.info(console + ": copied " +
+                                 os.path.basename(f.rstrip()))
+                else:
+                    logging.critical(console + ": hash sum mismatch (I/O error?), exiting!: " +
+                                     f.rstrip())
+            elif dest_hash == src_hash:
+                logging.info(console + ": verified " +
+                             os.path.basename(f.rstrip()))
 
     logging.info(console + ": whitelisted destination files are up-to-date")
 
