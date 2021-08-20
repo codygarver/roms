@@ -23,6 +23,7 @@ def copy_whitelisted_files(console, dest_dir, base_dir):
     with open(whitelist_file) as f:
         whitelist = f.read().splitlines()
 
+    # Copy whitelisted games' images to destination if they exist
     images_dir = base_dir + "/" + console + "/images/"
     imagelist = []
     if not args.no_images and os.path.isdir(images_dir):
@@ -36,13 +37,15 @@ def copy_whitelisted_files(console, dest_dir, base_dir):
 
         if len(imagelist) >= 1 and not os.path.isdir(console_dest_dir + "/images"):
             os.mkdir(console_dest_dir + "/images")
-
-        whitelist = sorted(
-            list(dict.fromkeys(whitelist + imagelist)))
     elif not os.path.isdir(images_dir):
         logging.warning(
             console + ": not copying images because dir does not exist: " + images_dir)
 
+    if len(imagelist) >= 1:
+        whitelist = sorted(
+            list(dict.fromkeys(whitelist + imagelist)))
+
+    # Copy whitelisted games' manuals to destination if they exist
     manuals_dir = base_dir + "/" + console + "/manuals/"
     manuallist = []
     if not args.no_manuals and os.path.isdir(manuals_dir):
@@ -60,10 +63,6 @@ def copy_whitelisted_files(console, dest_dir, base_dir):
     elif not os.path.isdir(manuals_dir):
         logging.warning(
             console + ": not copying manuals because dir does not exist: " + manuals_dir)
-
-    if len(imagelist) >= 1:
-        whitelist = sorted(
-            list(dict.fromkeys(whitelist + imagelist)))
 
     if len(manuallist) >= 1:
         whitelist = sorted(
