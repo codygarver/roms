@@ -39,7 +39,7 @@ def copy_whitelisted_files(console, dest_dir, base_dir):
 
         whitelist = sorted(
             list(dict.fromkeys(whitelist + imagelist)))
-    else:
+    elif not os.path.isdir(images_dir):
         logging.warning(
             console + ": not copying images because dir does not exist: " + images_dir)
 
