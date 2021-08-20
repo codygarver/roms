@@ -24,8 +24,8 @@ def copy_whitelisted_files(console, dest_dir, base_dir):
         whitelist = f.read().splitlines()
 
     images_dir = base_dir + "/" + console + "/images/"
+    imagelist = []
     if not args.no_images and os.path.isdir(images_dir):
-        imagelist = []
         for f in whitelist:
             src_file = os.path.join(base_dir + "/" + console, f.rstrip())
             basename = os.path.splitext(f.rstrip())[0]
@@ -44,8 +44,8 @@ def copy_whitelisted_files(console, dest_dir, base_dir):
             console + ": not copying images because dir does not exist: " + images_dir)
 
     manuals_dir = base_dir + "/" + console + "/manuals/"
+    manuallist = []
     if not args.no_manuals and os.path.isdir(manuals_dir):
-        manuallist = []
         for f in whitelist:
             src_file = os.path.join(base_dir + "/" + console, f.rstrip())
             basename = os.path.splitext(f.rstrip())[0]
