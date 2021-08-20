@@ -2,6 +2,7 @@
 
 import argparse
 import copy
+import glob
 import hashlib
 import logging
 import os
@@ -21,6 +22,26 @@ def copy_whitelisted_files(console, dest_dir, base_dir):
 
     with open(whitelist_file) as f:
         whitelist = f.read().splitlines()
+
+    images_dir = base_dir + "/" + console + "/images/"
+    if not args.no_images and os.path.isdir(images_dir):
+        imagelist = []
+        for f in whitelist:
+            src_file = os.path.join(base_dir + "/" + console, f.rstrip())
+            basename = os.path.splitext(f.rstrip())[0]
+            images = glob.glob(images_dir + basename + "*.png")
+            for i in images:
+                image = os.path.basename(i)
+                imagelist = imagelist + ["images/" + image]
+
+        if len(imagelist) >= 1 and not os.path.isdir(console_dest_dir + "/images"):
+            os.mkdir(console_dest_dir + "/images")
+
+        whitelist = sorted(
+            list(dict.fromkeys(whitelist + imagelist)))
+    else:
+        logging.warning(
+            console + ": not copying images because dir does not exist: " + images_dir)
 
     # Copy whitelisted destination files
     if len(whitelist) >= 1:
@@ -294,6 +315,7 @@ if __name__ == "__main__":
     parser.add_argument("--base-dir")
     parser.add_argument("--console-name", required=True)
     parser.add_argument("--destination-dir")
+    parser.add_argument("--no-images", action='store_true')
     parser.add_argument("--initialize", action='store_true')
     args = parser.parse_args()
 
