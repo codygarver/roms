@@ -21,6 +21,8 @@ To avoid being prompted to create missing directories, also use `--initialize` w
 
 To exclude transferring the `images` subdirectory found in each console directory, use `--no-images`. With or without `--no-images`, images will not be copied if they don't exist.
 
+To exclude transferring the `manuals` subdirectory found in each console directory, use `--no-manuals`. With or without `--no-manuals`, manuals will not be copied if they don't exist.
+
 ## Installation
 Download [roms.py](https://raw.githubusercontent.com/codygarver/roms/main/roms.py) and place it in the root of your rom collection (or use the `--base-dir` flag to point to that directory).
 
@@ -36,3 +38,4 @@ Download [roms.py](https://raw.githubusercontent.com/codygarver/roms/main/roms.p
 4. (Optional) To copy the whitelisted files (and delete the blacklisted files) to another location, add `--destination-dir` to Step 2.
 5. (Optional) Automatically create missing destination directories unprompted by using `--initialize` with `--destination-dir`.
 6. (Optional) To exclude copying `images` console subdirectory, use `--no-images`.
+7. (Optional) To exclude copying `manuals` console subdirectory, use `--no-manuals`.
