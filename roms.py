@@ -43,6 +43,32 @@ def copy_whitelisted_files(console, dest_dir, base_dir):
         logging.warning(
             console + ": not copying images because dir does not exist: " + images_dir)
 
+    manuals_dir = base_dir + "/" + console + "/manuals/"
+    if not args.no_manuals and os.path.isdir(manuals_dir):
+        manuallist = []
+        for f in whitelist:
+            src_file = os.path.join(base_dir + "/" + console, f.rstrip())
+            basename = os.path.splitext(f.rstrip())[0]
+            manuals = glob.glob(manuals_dir + basename + "*.pdf")
+            for m in manuals:
+                manual = os.path.basename(m)
+                manuallist = manuallist + ["manuals/" + manual]
+
+        if len(manuallist) >= 1 and not os.path.isdir(console_dest_dir + "/manuals"):
+            os.mkdir(console_dest_dir + "/manuals")
+
+    elif not os.path.isdir(manuals_dir):
+        logging.warning(
+            console + ": not copying manuals because dir does not exist: " + manuals_dir)
+
+    if len(imagelist) >= 1:
+        whitelist = sorted(
+            list(dict.fromkeys(whitelist + imagelist)))
+
+    if len(manuallist) >= 1:
+        whitelist = sorted(
+            list(dict.fromkeys(whitelist + manuallist)))
+
     # Copy whitelisted destination files
     if len(whitelist) >= 1:
         logging.info(console + ": updating whitelisted files to " +
@@ -316,6 +342,7 @@ if __name__ == "__main__":
     parser.add_argument("--console-name", required=True)
     parser.add_argument("--destination-dir")
     parser.add_argument("--no-images", action='store_true')
+    parser.add_argument("--no-manuals", action='store_true')
     parser.add_argument("--initialize", action='store_true')
     args = parser.parse_args()
 
