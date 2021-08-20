@@ -36,7 +36,7 @@ def copy_whitelisted_files(console, dest_dir, base_dir):
                 shutil.copy2(base_dir + "/" + console +
                              "/" + f.rstrip(), file_name)
                 logging.info(console + ": copied " +
-                             f.rstrip() + " successfully.")
+                             f.rstrip())
 
     logging.info(console + ": whitelisted destination files are up-to-date")
 
@@ -47,11 +47,11 @@ def create_dir(console, path):
         os.mkdir(path)
 
         if not os.path.isdir(path):
-             logging.critical(console + ": failed to create directory, exiting!: " +
-                              path)
-             exit(1)
+            logging.critical(console + ": failed to create directory, exiting!: " +
+                             path)
+            exit(1)
         else:
-             logging.info(console + ": created: " + path)
+            logging.info(console + ": created: " + path)
 
     if not args.initialize:
         logging.warning(console + ": " + path +
@@ -89,7 +89,7 @@ def delete_blacklisted_files(console, dest_dir, base_dir):
         file_name = os.path.join(console_dest_dir, f.rstrip())
         try:
             os.remove(file_name)
-            logging.info(console + ": successfully deleted " +
+            logging.info(console + ": deleted " +
                          f.rstrip())
         except OSError as e:
             if e.errno != errno.ENOENT:  # Ignore "No such file or directory"
