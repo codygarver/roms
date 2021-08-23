@@ -197,6 +197,12 @@ def generate_lists(console, base_dir):
         kids_list = list(
             filter(lambda v: re.match(regex_kids, v), filelist))
 
+    sports_list = []
+    if args.no_sports:
+        regex_sports = ".*Fishing.*|.*FIFA*|.*Poker.*|.*Soccer.*|.*WWE.*|.*PGA.*|.*NBA.*|.*NCAA.*|.*NFL.*|.*UFC.*|.*Tennis.*|.*TNA\sImpact.*|.*UEFA.*|.*Baseball.*|.*MLB.*|.*WRC.*|.*NASCAR.*"
+        sports_list = list(
+            filter(lambda v: re.match(regex_sports, v), filelist))
+
     # Replace "Enhance" with "TEMPORARY" to guarantee "(En)" search result accuracy
     filelist = [file.replace('Enhance', 'TEMPORARY') for file in filelist]
 
@@ -214,7 +220,7 @@ def generate_lists(console, base_dir):
 
     # Add extra lists to blacklist
     blacklist = sorted(
-        list(dict.fromkeys(bios_list + boardgame_list + kids_list + not_english)))
+        list(dict.fromkeys(bios_list + boardgame_list + kids_list + not_english + sports_list)))
 
     whitelist = [item for item in filelist if item not in blacklist]
 
@@ -349,6 +355,7 @@ if __name__ == "__main__":
     parser.add_argument("--no-images", action='store_true')
     parser.add_argument("--no-kids", action='store_true')
     parser.add_argument("--no-manuals", action='store_true')
+    parser.add_argument("--no-sports", action='store_true')
     args = parser.parse_args()
 
     if not args.base_dir:
