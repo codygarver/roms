@@ -256,8 +256,7 @@ def generate_lists(console, base_dir):
         whitelist = whitelist + [game_file]
 
         # Remove the greatest Rev from the minor Rev dictionary
-        rev_dict_min[filename]["revisions"].remove(
-            max(rev_dict_all[filename]["revisions"]))
+        rev_dict_min[filename]["revisions"].remove(max_ver)
 
         # Get the filename without any Rev
         game_file = re.sub(
