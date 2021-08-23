@@ -339,9 +339,9 @@ if __name__ == "__main__":
     parser.add_argument("--base-dir")
     parser.add_argument("--console-name", required=True)
     parser.add_argument("--destination-dir")
+    parser.add_argument("--initialize", action='store_true')
     parser.add_argument("--no-images", action='store_true')
     parser.add_argument("--no-manuals", action='store_true')
-    parser.add_argument("--initialize", action='store_true')
     args = parser.parse_args()
 
     if not args.base_dir:
