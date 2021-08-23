@@ -185,6 +185,12 @@ def generate_lists(console, base_dir):
     bios_list = list(
         filter(lambda v: re.match(regex_bios, v), filelist))
 
+    boardgame_list = []
+    if args.no_boardgames:
+        regex_boardgames = ".*Scrabble.*|.*Board\sGame.*|.*Board[Gg]ame.*"
+        boardgame_list = list(
+            filter(lambda v: re.match(regex_boardgames, v), filelist))
+
     # Replace "Enhance" with "TEMPORARY" to guarantee "(En)" search result accuracy
     filelist = [file.replace('Enhance', 'TEMPORARY') for file in filelist]
 
@@ -202,7 +208,7 @@ def generate_lists(console, base_dir):
 
     # Add extra lists to blacklist
     blacklist = sorted(
-        list(dict.fromkeys(bios_list + not_english)))
+        list(dict.fromkeys(bios_list + boardgame_list + not_english)))
 
     whitelist = [item for item in filelist if item not in blacklist]
 
@@ -333,6 +339,7 @@ if __name__ == "__main__":
     parser.add_argument("--console-name", required=True)
     parser.add_argument("--destination-dir")
     parser.add_argument("--initialize", action='store_true')
+    parser.add_argument("--no-boardgames", action='store_true')
     parser.add_argument("--no-images", action='store_true')
     parser.add_argument("--no-manuals", action='store_true')
     args = parser.parse_args()
