@@ -199,7 +199,7 @@ def generate_lists(console, base_dir):
 
     sports_list = []
     if args.no_sports:
-        regex_sports = ".*Fishing.*|.*FIFA*|.*Poker.*|.*Soccer.*|.*WWE.*|.*PGA.*|.*NBA.*|.*NCAA.*|.*NFL.*|.*UFC.*|.*Tennis.*|.*TNA\sImpact.*|.*UEFA.*|.*Baseball.*|.*MLB.*|.*WRC.*|.*NASCAR.*"
+        regex_sports = ".*Baseball.*|.*FIFA*|.*Fishing.*|.*MLB.*|.*NASCAR.*|.*NBA.*|.*NCAA.*|.*NFL.*|.*NHL.*|.*PGA.*|.*Poker.*|.*Soccer.*|.*TNA\sImpact.*|.*Tennis.*|.*UEFA.*|.*UFC.*|.*WRC.*|.*WWE.*"
         sports_list = list(
             filter(lambda v: re.match(regex_sports, v), filelist))
 
