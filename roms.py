@@ -70,8 +70,8 @@ def copy_whitelisted_files(console, dest_dir, base_dir):
 
     # Copy whitelisted destination files
     if len(whitelist) >= 1:
-        logging.info(console + ": updating whitelisted files to " +
-                     console_dest_dir + "...")
+        logging.info(console + ": updating whitelisted files in " +
+                     console_dest_dir + ", large files may take a while...")
 
         def get_hash(file):
             file_hash = hashlib.blake2b(pathlib.Path(
