@@ -180,44 +180,31 @@ def generate_lists(console, base_dir):
     filelist = list(
         filter(lambda v: re.match(ignored_extensions_regex, v), filelist))
 
+    # Blacklist [b], (Beta), [BIOS], (Demo), (Pirate), (Program), (Proto), and (Sample)
+    regex_bios = ".*\[b\].*|.*\(.*Beta.*\).*|.*[Bb][Ii][Oo][Ss].*|.*\(.*Demo.*\).*|.*\(.*Pirate.*\).*|.*\(.*Program.*\).*|.*\(.*Proto.*\).*|.*\(.*Sample.*\).*"
+    bios_list = list(
+        filter(lambda v: re.match(regex_bios, v), filelist))
+
     # Replace "Enhance" with "TEMPORARY" to guarantee "(En)" search result accuracy
     filelist = [file.replace('Enhance', 'TEMPORARY') for file in filelist]
 
-    # Blacklist [b], (Beta), [BIOS], (Demo), (Pirate), (Program), (Proto), and (Sample)
-    regex_bios = ".*\[b\].*|.*\(.*Beta.*\).*|.*[Bb][Ii][Oo][Ss].*|.*\(.*Demo.*\).*|.*\(.*Pirate.*\).*|.*\(.*Program.*\).*|.*\(.*Proto.*\).*|.*\(.*Sample.*\).*"
-    blacklist = list(
-        filter(lambda v: re.match(regex_bios, v), filelist))
-
     # Blacklist files that are not (U), (USA), (World), (En)
     regex_not_english = "(?!.*\(U\).*)(?!.*\(.*USA.*\).*)(?!.*\(.*World.*\).*)(?!.*\(.*En.*\).*)"
-    blacklist = blacklist + list(
+    not_english = list(
         filter(lambda v: re.match(regex_not_english, v), filelist))
 
     # Replace "TEMPORARY" with "Enhance"
-    blacklist = [file.replace('TEMPORARY', 'Enhance') for file in blacklist]
-
-    # Add blacklist custom (if it exists) to blacklist auto
-    blacklist_custom_path = console_path + "/blacklist.custom.txt"
-    if os.path.exists(blacklist_custom_path):
-        with open(blacklist_custom_path) as blacklist_custom:
-            blacklist = blacklist + blacklist_custom.read().splitlines()
-
-    # Whitelist files that are (U), (USA), (World), (En)
-    regex_english = ".*\(U\).*|.*\(.*USA.*\).*|.*\(.*World.*\).*|.*\(.*En.*\).*"
-
-    whitelist = list(
-        filter(lambda v: re.match(regex_english, v), filelist))
-
-    # Whitelist files that are not [b], (Beta), [BIOS], (Demo), (Pirate), (Program), (Proto), or (Sample)
-    regex_not_bios = [
-        "(?!.*\[b\].*)", "(?!.*\(.*Beta.*\).*)", "(?!.*[Bb][Ii][Oo][Ss].*)", "(?!.*\(.*Demo.*\).*)", "(?!.*\(.*Pirate.*\).*)", "(?!.*\(.*Program.*\).*)", "(?!.*\(.*Proto.*\).*)", "(?!.*\(.*Sample.*\).*)"]
-
-    for regex in regex_not_bios:
-        whitelist = list(
-            filter(lambda v: re.match(regex, v), whitelist))
+    not_english = [file.replace('TEMPORARY', 'Enhance')
+                   for file in not_english]
 
     # Replace "TEMPORARY" with "Enhance"
-    whitelist = [file.replace('TEMPORARY', 'Enhance') for file in whitelist]
+    filelist = [file.replace('TEMPORARY', 'Enhance') for file in filelist]
+
+    # Add extra lists to blacklist
+    blacklist = sorted(
+        list(dict.fromkeys(bios_list + not_english)))
+
+    whitelist = [item for item in filelist if item not in blacklist]
 
     # List filenames including Rev
     regex_revision = ".*\(Rev.*\d\).*"
@@ -288,6 +275,12 @@ def generate_lists(console, base_dir):
                 pass
 
             blacklist = blacklist + [game_file]
+
+    # Add blacklist custom (if it exists) to blacklist auto
+    blacklist_custom_path = console_path + "/blacklist.custom.txt"
+    if os.path.exists(blacklist_custom_path):
+        with open(blacklist_custom_path) as blacklist_custom:
+            blacklist = blacklist + blacklist_custom.read().splitlines()
 
     # Alphabetize and remove duplicates
     blacklist = sorted(
