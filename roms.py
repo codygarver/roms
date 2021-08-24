@@ -226,7 +226,7 @@ def generate_lists(console, base_dir):
 
     # Add extra lists to blacklist
     blacklist = sorted(
-        list(dict.fromkeys(bios_list + boardgame_list + kids_list + not_english + sports_list)))
+        list(dict.fromkeys(bios_list + boardgame_list + kids_list + not_english + racing_list + sports_list)))
 
     whitelist = [item for item in filelist if item not in blacklist]
 
