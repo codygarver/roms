@@ -197,6 +197,12 @@ def generate_lists(console, base_dir):
         kids_list = list(
             filter(lambda v: re.match(regex_kids, v), filelist))
 
+    racing_list = []
+    if args.no_racing:
+        regex_racing = ".*(1|2|3)Xtreme.*|.*ATV.*|.*BMX.*|.*F1.*|.*Ford.*|.*Formula\s(1|One).*|.*Motocross.*|.*[Rr]ace.*|.*[Rr]acing.*|.*Super(bike|cross).*"
+        racing_list = list(
+            filter(lambda v: re.match(regex_racing, v), filelist))
+
     sports_list = []
     if args.no_sports:
         regex_sports = ".*[Bb]aseball.*|.*Big\sOl.*Bass.*|.*Billiards.*|.*Bottom\sof\sthe\s9th.*|.*Bowling.*|.*Boxing.*|.*Cabela.*|.*ESPN.*|.*Faire\sGames.*|.*FIFA*|.*Fisherman.*|.*Fishing.*|.*Golf.*|.*Hockey.*|.*MLB.*|.*NASCAR.*|.*PGA.*|.*Poker.*|.*Pool.*|.*Soccer.*|.*WWE.*|.*NBA.*|.*NCAA.*|.*NFL.*|.*NHL.*|.*UFC.*|.*Tennis.*|.*TNA\sImpact.*|.*UEFA.*|.*WRC.*"
@@ -355,6 +361,7 @@ if __name__ == "__main__":
     parser.add_argument("--no-images", action='store_true')
     parser.add_argument("--no-kids", action='store_true')
     parser.add_argument("--no-manuals", action='store_true')
+    parser.add_argument("--no-racing", action='store_true')
     parser.add_argument("--no-sports", action='store_true')
     args = parser.parse_args()
 
