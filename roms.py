@@ -181,31 +181,31 @@ def generate_lists(console, base_dir):
         filter(lambda v: re.match(ignored_extensions_regex, v), filelist))
 
     # Blacklist [b], (Beta), [BIOS], (Demo), (Pirate), (Program), (Proto), and (Sample)
-    regex_bios = ".*[Aa]ction.*[Rr]eplay.*|.*\[b\].*|.*\(.*Beta.*\).*|.*[Bb][Ii][Oo][Ss].*|.*\(.*Demo.*\).*|.*Demo.*(CD|Disc).*|.*Game[Ss]hark.*|.*\(.*Pirate.*\).*|.*Preview.*|.*\(.*Program.*\).*|.*\(.*Proto.*\).*|.*\(.*Sample.*\).*"
+    regex_bios = ".*[Aa]ction.*[Rr]eplay.*|.*Bible.*|.*Demo.*(CD|Disc).*|.*Game.*Boy.*Camera.*|.*Game[Ss]hark.*|.*InfoGenius.*|.*Preview.*|.*Sewing.*Machine.*Operation.*Software.*|.*[Bb][Ii][Oo][Ss].*|.*\(.*Beta.*\).*|.*\(.*Demo.*\).*|.*\(.*Pirate.*\).*|.*\(.*Program.*\).*|.*\(.*Proto.*\).*|.*\(.*Sample.*\).*|.*\[b\].*"
     bios_list = list(
         filter(lambda v: re.match(regex_bios, v), filelist))
 
     boardgame_list = []
     if args.no_boardgames:
-        regex_boardgames = ".*Board[Gg]ame.*.*Board\sGame.*|.*Caesars\sPalace.*|.*Card\sGames.*|.*Chess.*|.*Puzzle.*|.*Quiz*.|.*Scrabble.*|.*Sudoku.*"
+        regex_boardgames = ".*Board[Gg]ame.*|.*Board\sGame.*|.*Brain.*Game.*|.*Caesars\sPalace.*|.*Card\sGames.*|.*Chess.*|.*Fun.*Pak.*|.*Gambling.*|.*Puzzle.*|.*Quiz.*|.*Scrabble.*|.*Sudoku.*|.*Vegas.*Games.*|.*Vegas.*Stakes.*|.*Wheel.*Fortune.*|.*Who.*Wants.*Millionaire.*|.*[Uu][Nn][Oo].*"
         boardgame_list = list(
             filter(lambda v: re.match(regex_boardgames, v), filelist))
 
     kids_list = []
     if args.no_kids:
-        regex_kids = ".*Arthur\!.*|.*Barbie.*|.*Blue.*Clues.*|.*Bratz.*|.*Cat\sin\sthe\sHat.*|.*Despicable\sMe.*|.*Disney.*|.*Dragon\sTales.*|.*Every\sChild\sCan\sSucceed.*|.*Fun.*Learn*.|.*Nickelodeon.*|.*Petz.*|.*Sesame\sStreet.*|.*[Ww][Ii][Nn][Xx].*"
+        regex_kids = ".*Arthur\!.*|.*Barbie.*|.*Beauty.*Beast.*|.*Blue.*Clues.*|.*Bratz.*|.*Cat\sin\sthe\sHat.*|.*Despicable\sMe.*|.*Disney.*|.*Dragon\sTales.*|.*Every\sChild\sCan\sSucceed.*|.*Fun.*Learn.*|.*Kim.*Possible.*|.*Lilo.*Stitch.*|.*Nickelodeon.*|.*Petz.*|.*Pooh.*|.*Sesame\sStreet.*|.*Snow.*White.*|.*Stuart.*Little.*|.*Tonka.*|.*Zoboomafoo.*|.*[Ww][Ii][Nn][Xx].*"
         kids_list = list(
             filter(lambda v: re.match(regex_kids, v), filelist))
 
     racing_list = []
     if args.no_racing:
-        regex_racing = ".*(1|2|3)Xtreme.*|.*ATV.*|.*BMX.*|.*F1.*|.*Ford.*|.*Formula\s(1|One).*|.*Motocross.*|.*[Rr]ace.*|.*[Rr]acing.*|.*Super(bike|cross).*"
+        regex_racing = ".*(1|2|3)Xtreme.*|.*ATV.*|.*BMX.*|.*Biking.*|.*F1.*|.*Ferrari.*|.*Ford.*|.*Formula\s(1|One).*|.*Grand.*Prix.*|.*Harley.*Davidson.*|.*Lamborghini.*American.*Challenge.*|.*Madden.*|.*Micro.*Machines.*|.*Motocross.*|.*NASCAR.*|.*Road.*Rash.*|.*Roadsters.*|.*Scooter.*|.*Super(bike|cross).*|.*Test.*Drive.*|.*Top.*Gear.*|.*Touring.*Car.*|.*V\-Rally.*|.*Xtreme.*Wheels.*|.*[Rr]ace.*|.*[Rr]acing.*"
         racing_list = list(
             filter(lambda v: re.match(regex_racing, v), filelist))
 
     sports_list = []
     if args.no_sports:
-        regex_sports = ".*[Bb]aseball.*|.*Big\sOl.*Bass.*|.*Billiards.*|.*Bottom\sof\sthe\s9th.*|.*Bowling.*|.*Boxing.*|.*Cabela.*|.*ESPN.*|.*Faire\sGames.*|.*FIFA*|.*Fisherman.*|.*Fishing.*|.*Golf.*|.*Hockey.*|.*MLB.*|.*NASCAR.*|.*PGA.*|.*Poker.*|.*Pool.*|.*Soccer.*|.*WWE.*|.*NBA.*|.*NCAA.*|.*NFL.*|.*NHL.*|.*UFC.*|.*Tennis.*|.*TNA\sImpact.*|.*UEFA.*|.*WRC.*"
+        regex_sports = ".*[Bb]aseball.*|.*Bases.*Loaded.*|.*Big\sOl.*Bass.*|.*Billiards.*|.*Boarder.*|.*Bottom\sof\sthe\s9th.*|.*Bowling.*|.*Boxing.*|.*Cabela.*|.*Darts.*|.*ESPN.*|.*FIFA*|.*Faire\sGames.*|.*Fisherman.*|.*Fishing.*|.*Golf.*|.*Hockey.*|.*Karnaaj.*Rally.*|.*MLB.*|.*NBA.*|.*NCAA.*|.*NFL.*|.*NHL.*|.*Olympic.*|.*PGA.*|.*Poker.*|.*Pool.*|.*Skate.*|.*Soccer.*|.*Sports.*|.*Super.*Bowl.*|.*TNA\sImpact.*|.*Tennis.*|.*Toobin.*|.*UEFA.*|.*UFC.*|.*Ultimate.*Fighting.*Championship.*|.*Ultimate.*Paintball.*|.*Ultimate.*Surfing.*|.*WCW.*|.*WRC.*|.*WWE.*|.*WWF.*|.*World.*Cup.*|.*Wrestling.*"
         sports_list = list(
             filter(lambda v: re.match(regex_sports, v), filelist))
 
