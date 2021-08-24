@@ -176,38 +176,38 @@ def generate_lists(console, base_dir):
         console_path) if os.path.isfile(os.path.join(console_path, f))]
 
     # Remove ignored files by extension
-    ignored_extensions_regex = "(?!.*\.txt$)(?!.*\.auto$)(?!.*\.png$)(?!.*\.srm$)(?!.*\.xml$)(?!\..*$)"
+    ignored_extensions_regex = "(?!\..*$)(?!.*\.auto$)(?!.*\.png$)(?!.*\.srm$)(?!.*\.txt$)(?!.*\.xml$)"
     filelist = list(
         filter(lambda v: re.match(ignored_extensions_regex, v), filelist))
 
     # Blacklist [b], (Beta), [BIOS], (Demo), (Pirate), (Program), (Proto), and (Sample)
-    regex_bios = ".*\[b\].*|.*\(.*Beta.*\).*|.*[Bb][Ii][Oo][Ss].*|.*\(.*Demo.*\).*|.*\(.*Pirate.*\).*|.*\(.*Program.*\).*|.*\(.*Proto.*\).*|.*\(.*Sample.*\).*"
+    regex_bios = ".*[Aa]ction.*[Rr]eplay.*|.*\[b\].*|.*\(.*Beta.*\).*|.*[Bb][Ii][Oo][Ss].*|.*\(.*Demo.*\).*|.*Demo.*(CD|Disc).*|.*Game[Ss]hark.*|.*\(.*Pirate.*\).*|.*Preview.*|.*\(.*Program.*\).*|.*\(.*Proto.*\).*|.*\(.*Sample.*\).*"
     bios_list = list(
         filter(lambda v: re.match(regex_bios, v), filelist))
 
     boardgame_list = []
     if args.no_boardgames:
-        regex_boardgames = ".*Scrabble.*|.*Board\sGame.*|.*Board[Gg]ame.*"
+        regex_boardgames = ".*Board[Gg]ame.*.*Board\sGame.*|.*Caesars\sPalace.*|.*Card\sGames.*|.*Chess.*|.*Puzzle.*|.*Quiz*.|.*Scrabble.*|.*Sudoku.*"
         boardgame_list = list(
             filter(lambda v: re.match(regex_boardgames, v), filelist))
 
     kids_list = []
     if args.no_kids:
-        regex_kids = ".*Petz.*|.*Sesame\.Street.*|.*[Ww][Ii][Nn][Xx].*"
+        regex_kids = ".*Arthur\!.*|.*Barbie.*|.*Blue.*Clues.*|.*Bratz.*|.*Cat\sin\sthe\sHat.*|.*Despicable\sMe.*|.*Disney.*|.*Dragon\sTales.*|.*Every\sChild\sCan\sSucceed.*|.*Fun.*Learn*.|.*Nickelodeon.*|.*Petz.*|.*Sesame\sStreet.*|.*[Ww][Ii][Nn][Xx].*"
         kids_list = list(
             filter(lambda v: re.match(regex_kids, v), filelist))
 
     sports_list = []
     if args.no_sports:
-        regex_sports = ".*Baseball.*|.*FIFA*|.*Fishing.*|.*MLB.*|.*NASCAR.*|.*NBA.*|.*NCAA.*|.*NFL.*|.*NHL.*|.*PGA.*|.*Poker.*|.*Soccer.*|.*TNA\sImpact.*|.*Tennis.*|.*UEFA.*|.*UFC.*|.*WRC.*|.*WWE.*"
+        regex_sports = ".*[Bb]aseball.*|.*Big\sOl.*Bass.*|.*Billiards.*|.*Bottom\sof\sthe\s9th.*|.*Bowling.*|.*Boxing.*|.*Cabela.*|.*ESPN.*|.*Faire\sGames.*|.*FIFA*|.*Fisherman.*|.*Fishing.*|.*Golf.*|.*Hockey.*|.*MLB.*|.*NASCAR.*|.*PGA.*|.*Poker.*|.*Pool.*|.*Soccer.*|.*WWE.*|.*NBA.*|.*NCAA.*|.*NFL.*|.*NHL.*|.*UFC.*|.*Tennis.*|.*TNA\sImpact.*|.*UEFA.*|.*WRC.*"
         sports_list = list(
             filter(lambda v: re.match(regex_sports, v), filelist))
 
     # Replace "Enhance" with "TEMPORARY" to guarantee "(En)" search result accuracy
     filelist = [file.replace('Enhance', 'TEMPORARY') for file in filelist]
 
-    # Blacklist files that are not (U), (USA), (World), (En)
-    regex_not_english = "(?!.*\(U\).*)(?!.*\(.*USA.*\).*)(?!.*\(.*World.*\).*)(?!.*\(.*En.*\).*)"
+    # Blacklist files that are not (U), (USA), (World)
+    regex_not_english = "(?!.*\(U\).*)(?!.*\(.*USA.*\).*)(?!.*\(.*World.*\).*)"
     not_english = list(
         filter(lambda v: re.match(regex_not_english, v), filelist))
 
