@@ -331,14 +331,14 @@ def generate_lists(console, base_dir):
     with open(whitelist_path, "w") as white_file:
         for file_line in whitelist:
             white_file.write('%s\n' % file_line)
-    logging.info(console + ": blacklist generated")
+    logging.info(console + ": whitelist generated")
 
     # Write blacklist to file
     blacklist_path = console_path + "/blacklist.auto.txt"
     with open(blacklist_path, "w") as black_file:
         for file_line in blacklist:
             black_file.write('%s\n' % file_line)
-    logging.info(console + ": whitelist generated")
+    logging.info(console + ": blacklist generated")
 
 
 if __name__ == "__main__":
