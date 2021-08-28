@@ -274,12 +274,10 @@ def generate_lists(console, base_dir):
             " REPLACE_WITH_REV", "", filename)
 
         # Confirm the reconstructed filename exists
-        if os.path.exists(console_path + "/" + game_file):
-            # Keep the whitelist in sync
-            try:
+        if game_file in filelist:
+            if game_file in whitelist:
+                # Keep the whitelist in sync
                 whitelist.remove(game_file)
-            except:
-                pass
 
             # Blacklist the filename without any Rev
             blacklist = blacklist + [game_file]
@@ -291,12 +289,10 @@ def generate_lists(console, base_dir):
                 "REPLACE_WITH_REV", rev, filename)
 
         # Confirm the reconstructed filename exists
-        if os.path.exists(console_path + "/" + game_file):
-            # Keep the whitelist in sync
-            try:
+        if game_file in filelist:
+            if game_file in whitelist:
+                # Keep the whitelist in sync
                 whitelist.remove(game_file)
-            except:
-                pass
 
             blacklist = blacklist + [game_file]
 
