@@ -185,6 +185,12 @@ def generate_lists(console, base_dir):
     bios_list = list(
         filter(lambda v: re.match(regex_bios, v), filelist))
 
+    combos_list = []
+    if args.no_combos:
+        regex_combos = "^([Cc]ombo|\d|([Tt](wo|hree)|[Ff](our|ive)|[Ss](ix|even)|[Ee](ight|even)|[Ee](ight|even)|[Nn]ine|[Tt]en)).*([Gg]ame|([Ii]n.*(1|[Oo]ne)|[Pp]a(ck|k)))"
+        combos_list = list(
+            filter(lambda v: re.match(regex_combos, v), filelist))
+
     boardgame_list = []
     if args.no_boardgames:
         regex_boardgames = ".*Board[Gg]ame.*|.*Board\sGame.*|.*Brain.*Game.*|.*Caesars\sPalace.*|.*Card\sGames.*|.*Chess.*|.*Family.*Feud.*|.*Fun.*Pak.*|.*Gambling.*|.*Puzzle.*|.*Quiz.*|.*Scrabble.*|.*Sudoku.*|.*[Uu][Nn][Oo].*|.*Vegas.*Games.*|.*Vegas.*Stakes.*|.*Wheel.*Fortune.*|.*Who.*Wants.*Millionaire.*|.*[Uu][Nn][Oo].*"
@@ -232,7 +238,7 @@ def generate_lists(console, base_dir):
 
     # Add extra lists to blacklist
     blacklist = sorted(
-        list(dict.fromkeys(bios_list + boardgame_list + gba_videos_list + kids_list + not_english + racing_list + sports_list)))
+        list(dict.fromkeys(bios_list + combos_list + boardgame_list + gba_videos_list + kids_list + not_english + racing_list + sports_list)))
 
     whitelist = [item for item in filelist if item not in blacklist]
 
@@ -359,6 +365,7 @@ if __name__ == "__main__":
     parser.add_argument("--console-name", required=True)
     parser.add_argument("--destination-dir")
     parser.add_argument("--initialize", action='store_true')
+    parser.add_argument("--no-combos", action='store_true')
     parser.add_argument("--no-boardgames", action='store_true')
     parser.add_argument("--no-gba-videos", action='store_true')
     parser.add_argument("--no-images", action='store_true')
