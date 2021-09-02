@@ -213,7 +213,7 @@ def generate_lists(console, base_dir):
     filelist = [file.replace('Enhance', 'TEMPORARY') for file in filelist]
 
     # Blacklist files that are not (U), (USA), (World)
-    regex_not_english = "(?!.*\(U\).*)(?!.*\(.*USA.*\).*)(?!.*\(.*World.*\).*)"
+    regex_not_english = "(?!.*\(U\).*)(?!.*\(.*US.*\).*)(?!.*\(.*USA.*\).*)(?!.*\(.*World.*\).*)"
     not_english = list(
         filter(lambda v: re.match(regex_not_english, v), filelist))
 
