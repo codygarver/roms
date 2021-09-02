@@ -176,7 +176,7 @@ def generate_lists(console, base_dir):
         console_path) if os.path.isfile(os.path.join(console_path, f))]
 
     # Remove ignored files by extension
-    ignored_extensions_regex = "(?!\..*$)(?!.*\.auto$)(?!.*\.png$)(?!.*\.srm$)(?!.*\.txt$)(?!.*\.xml$)"
+    ignored_extensions_regex = "(?!\..*$)(?!.*\.auto$)(?!.*\.png$)(?!.*\.sql$)(?!.*\.srm$)(?!.*\.torrent$)(?!.*\.txt$)(?!.*\.xml$)"
     filelist = list(
         filter(lambda v: re.match(ignored_extensions_regex, v), filelist))
 
