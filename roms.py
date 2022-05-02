@@ -187,7 +187,7 @@ def generate_lists(console, base_dir):
 
     combos_list = []
     if args.no_combos:
-        regex_combos = "^([Cc]ombo|\d|([Tt](wo|hree)|[Ff](our|ive)|[Ss](ix|even)|[Ee](ight|even)|[Ee](ight|even)|[Nn]ine|[Tt]en)).*([Gg]ame|([Ii]n.*(1|[Oo]ne)|[Pp]a(ck|k)))"
+        regex_combos = "^([Cc]ombo|\d|.*([Tt](wo|hree)|[Dd]ouble|[Ff](our|ive)|[Ss](ix|even)|[Ee](ight|even)|[Ee](ight|even)|[Nn]ine|[Tt]en)).*([Gg]ame|([Ii]n.*(1|[Oo]ne)|[Pp]a(ck|k)))"
         combos_list = list(
             filter(lambda v: re.match(regex_combos, v), filelist))
 
@@ -199,13 +199,13 @@ def generate_lists(console, base_dir):
 
     kids_list = []
     if args.no_kids:
-        regex_kids = ".*Arthur\!.*|.*Barbie.*|.*Beauty.*Beast.*|.*Berenstain.*Bears.*|.*Blue.*Clues.*|.*Bob.*Builder.*|.*Bratz.*|.*Cat\sin\sthe\sHat.*|.*Cheetah.*Girls.*|.*Despicable\sMe.*|.*Disney.*|.*Dora.*Explor.*|.*Dragon\sTales.*|.*everGirl.*|.*Every\sChild\sCan\sSucceed.*|.*Fun.*Learn.*|.*Kim.*Possible.*|.*Land.*Before.*Time.*|.*Lilo.*Stitch.*|.*Little.*Einsteins.*|.*Little.*Mermaid.*|.*Lizzie.*McGuire.*|.*Mary.*Kate.*Ashley.*|.*NeoPets.*|.*Nickelodeon.*|.*Petz.*|.*Princess.*Natasha.*|.*Pooh.*|.*Sabrina.*Teenage.*Witch.*|.*Sesame\sStreet.*|.*Snow.*White.*|.*Strawberry.*Shortcake.*|.*Stuart.*Little.*|.*That.*So.*Raven.*|.*Tonka.*|.*Totally.*Spies.*|.*Trollz.*|.*VeggieTales.*|.*Zoboomafoo.*|.*[Ww][Ii][Nn][Xx].*"
+        regex_kids = ".*Arthur\!.*|.*Barbie.*|.*Beauty.*Beast.*|.*Berenstain.*Bears.*|.*Blue.*Clues.*|.*Bob.*Builder.*|.*Bratz.*|.*Britney.*Dance.*Beat.*|.*Cat\sin\sthe\sHat.*|.*Cheetah.*Girls.*|.*Despicable\sMe.*|.*Disney.*|.*Dogz.*|.*Dora.*Explor.*|.*Dr.*Seuss.*|.*Drake.*Josh.*|.*Dragon\sTales.*|.*everGirl.*|.*Every\sChild\sCan\sSucceed.*|.*Fun.*Learn.*|.*Kim.*Possible.*|.*Land.*Before.*Time.*|.*Lilo.*Stitch.*|.*Little.*Einsteins.*|.*Little.*Mermaid.*|.*Lizzie.*McGuire.*|.*Mary.*Kate.*Ashley.*|.*Nancy.*Drew.*|.*NeoPets.*|.*Nickelodeon.*|.*Petz.*|.*Princess.*Natasha.*|.*Pooh.*|.*Sabrina.*Teenage.*Witch.*|.*Sesame\sStreet.*|.*Shrek.*|.*Snow.*White.*|.*Strawberry.*Shortcake.*|.*Stuart.*Little.*|.*That.*So.*Raven.*|.*Tonka.*|.*Totally.*Spies.*|.*Trollz.*|.*VeggieTales.*|.*Zoey.*101.*|.*Zoboomafoo.*|.*[Ww][Ii][Nn][Xx].*"
         kids_list = list(
             filter(lambda v: re.match(regex_kids, v), filelist))
 
     racing_list = []
     if args.no_racing:
-        regex_racing = ".*(1|2|3)Xtreme.*|.*ATV.*|.*BMX.*|.*Biking.*|.*F1.*|.*Ferrari.*|.*Ford.*|.*Formula\s(1|One).*|.*Grand.*Prix.*|.*Harley.*Davidson.*|.*Lamborghini.*American.*Challenge.*|.*Madden.*|.*Micro.*Machines.*|.*Motocross.*|.*NASCAR.*|.*Road.*Rash.*|.*Roadsters.*|.*Scooter.*|.*Super(bike|cross).*|.*Test.*Drive.*|.*Top.*Gear.*|.*Touring.*Car.*|.*V\-Rally.*|.*Xtreme.*Wheels.*|.*[Rr]ace.*|.*Racing.*|.*Mototrax.*|.*Monster.*Jam.*|.*XS.*Moto.*"
+        regex_racing = ".*(1|2|3)Xtreme.*|.*ATV.*|.*BMX.*|.*Biking.*|.*Driv3r.*|.*F1.*|.*Ferrari.*|.*Ford.*|.*Formula\s(1|One).*|.*Grand.*Prix.*|.*Harley.*Davidson.*|.*Hot.*Wheels.*|.*Lamborghini.*American.*Challenge.*|.*Madden.*|.*Micro.*Machines.*|.*Motocross.*|.*NASCAR.*|.*Road.*Rash.*|.*Roadsters.*|.*Scooter.*|.*Super(bike|cross).*|.*Test.*Drive.*|.*Top.*Gear.*|.*Touring.*Car.*|.*V\-Rally.*|.*Xtreme.*Wheels.*|.*[Rr]ace.*|.*Racing.*|.*Mototrax.*|.*Monster.*Jam.*|.*XS.*Moto.*|.*xXx.*"
         racing_list = list(
             filter(lambda v: re.match(regex_racing, v), filelist))
 
@@ -214,6 +214,12 @@ def generate_lists(console, base_dir):
         regex_sports = ".*[Bb]aseball.*|.*Bases.*Loaded.*|.*Bass.*(Challenge|Championship).*|.*Big\sOl.*Bass.*|.*Billiards.*|.*Boarder.*|.*Bottom\sof\sthe\s9th.*|.*Bowling.*|.*Boxing.*|.*Cabela.*|.*Darts.*|.*ECW.*|.*ESPN.*|.*FIFA*|.*Faire\sGames.*|.*Fisherman.*|.*Fishing.*|.*Football.*|.*Golf.*|.*Hockey.*|.*Karnaaj.*Rally.*|.*MLB.*|.*MotoGP.*|.*MX.*2000.*|.*NBA.*|.*NCAA.*|.*NFL.*|.*NHL.*|.*Olympic.*|.*PGA.*|.*Poker.*|.*Pool.*|.*Skate.*|.*Soccer.*|.*Sports.*|.*Super.*Bowl.*|.*TNA\sImpact.*|.*Tennis.*|.*Toobin.*|.*UEFA.*|.*UFC.*|.*Ultimate.*Fighting.*Championship.*|.*Ultimate.*Paintball.*|.*Ultimate.*Surfing.*|.*Wakeboard.*|.*WCW.*|.*WRC.*|.*WWE.*|.*WWF.*|.*World.*Cup.*|.*Wrestling.*"
         sports_list = list(
             filter(lambda v: re.match(regex_sports, v), filelist))
+
+    virtual_console_list = []
+    if args.no_virtual_console:
+        regex_virtual_console = ".*[Vv]irtual.*[Cc]onsole.*"
+        virtual_console_list = list(
+            filter(lambda v: re.match(regex_virtual_console, v), filelist))
 
     gba_videos_list = []
     if args.no_gba_videos:
@@ -238,7 +244,7 @@ def generate_lists(console, base_dir):
 
     # Add extra lists to blacklist
     blacklist = sorted(
-        list(dict.fromkeys(bios_list + combos_list + boardgame_list + gba_videos_list + kids_list + not_english + racing_list + sports_list)))
+        list(dict.fromkeys(bios_list + combos_list + boardgame_list + gba_videos_list + kids_list + not_english + racing_list + sports_list + virtual_console_list)))
 
     whitelist = [item for item in filelist if item not in blacklist]
 
@@ -373,6 +379,7 @@ if __name__ == "__main__":
     parser.add_argument("--no-manuals", action='store_true')
     parser.add_argument("--no-racing", action='store_true')
     parser.add_argument("--no-sports", action='store_true')
+    parser.add_argument("--no-virtual-console", action='store_true')
     args = parser.parse_args()
 
     if not args.base_dir:
