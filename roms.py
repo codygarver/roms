@@ -331,15 +331,15 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if not args.base_dir:
-        base_dir = str(pathlib.Path.cwd())
+        base_dir = pathlib.Path.cwd()
         logging.warning(
-            "missing --base-dir argument, falling back to current working directory (" + base_dir + ")!")
+            "missing --base-dir argument, falling back to current working directory (" + str(base_dir) + ")!")
     else:
-        base_dir = args.base_dir
+        base_dir = pathlib.Path(args.base_dir)
 
     if args.console_name == "all":
-        console_dirs = ["gb", "gba", "gbc", "genesis",
-                        "n64", "nes", "psp", "psx", "snes"]
+        console_dirs = [f.name for f in base_dir.glob(
+            "[!.]*") if f.is_dir()]
     else:
         console_dirs = [args.console_name]
 
