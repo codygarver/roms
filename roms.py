@@ -14,9 +14,7 @@ def copy_whitelisted_files(console, dest_dir, base_dir):
     console_dest_dir = pathlib.Path(dest_dir, console)
     console_src_dir = pathlib.Path(base_dir, console)
 
-    # Prompt to create console dir
-    if not console_dest_dir.is_dir():
-        create_dir(console, console_dest_dir)
+    console_dest_dir.mkdir(parents=True, exist_ok=True)
 
     whitelist_file = pathlib.Path(console_src_dir, "whitelist.auto.txt")
     whitelist = whitelist_file.read_text().splitlines()
@@ -92,32 +90,6 @@ def copy_whitelisted_files(console, dest_dir, base_dir):
     logging.info(console + ": whitelisted destination files are up-to-date")
 
 
-def create_dir(console, path):
-    path = str(path)
-
-    def mkdir(path):
-        os.mkdir(path)
-
-        if not os.path.isdir(path):
-            logging.critical(console + ": failed to create directory, exiting!: " +
-                             path)
-            exit(1)
-        else:
-            logging.info(console + ": created: " + path)
-
-    if not args.initialize:
-        logging.warning(console + ": " + path +
-                        " does NOT exist, create it? y/N:")
-        create = input()
-        if create == "y" or create == "Y":
-            mkdir(path)
-        else:
-            logging.critical(console + ": unable to proceed, exiting!")
-            exit(1)
-    else:
-        mkdir(path)
-
-
 def delete_blacklisted_files(console, dest_dir, base_dir):
     blacklist_file = pathlib.Path(base_dir, console, "blacklist.auto.txt")
     blacklist = blacklist_file.read_text().splitlines()
@@ -145,10 +117,7 @@ def delete_blacklisted_files(console, dest_dir, base_dir):
 
 def generate_lists(console, base_dir):
     console_path = pathlib.Path(base_dir, console)
-
-    # Prompt to create console dir
-    if not console_path.is_dir():
-        create_dir(console, console_path)
+    console_path.mkdir(parents=True, exist_ok=True)
 
     # Initial list of files in console dir
     filelist = [f.name for f in console_path.glob(
