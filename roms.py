@@ -12,20 +12,21 @@ import shutil
 
 def copy_whitelisted_files(console, dest_dir, base_dir):
     console_dest_dir = pathlib.Path(dest_dir, console)
+    console_src_dir = pathlib.Path(base_dir, console)
 
     # Prompt to create console dir
     if not console_dest_dir.is_dir():
         create_dir(console, console_dest_dir)
 
-    whitelist_file = pathlib.Path(base_dir, console, "whitelist.auto.txt")
+    whitelist_file = pathlib.Path(console_src_dir, "whitelist.auto.txt")
     whitelist = whitelist_file.read_text().splitlines()
 
     # Copy whitelisted games' images to destination if they exist
-    images_dir = pathlib.Path(base_dir, console, "images")
+    images_dir = pathlib.Path(console_src_dir, "images")
     if not args.no_images and images_dir.is_dir():
         imagelist = []
         for f in whitelist:
-            src_file = pathlib.Path(base_dir, console, f)
+            src_file = pathlib.Path(console_src_dir, f)
             basename = src_file.stem
             imagelist = imagelist + images_dir.glob(basename + "*.png")
 
@@ -36,11 +37,11 @@ def copy_whitelisted_files(console, dest_dir, base_dir):
             images_dest_dir.mkdir(parents=True, exist_ok=True)
 
     # Copy whitelisted games' manuals to destination if they exist
-    manuals_dir = pathlib.Path(base_dir, console, "manuals")
+    manuals_dir = pathlib.Path(console_src_dir, "manuals")
     if not args.no_manuals and manuals_dir.is_dir():
         manuallist = []
         for f in whitelist:
-            src_file = pathlib.Path(base_dir, console, f)
+            src_file = pathlib.Path(console_src_dir, f)
             basename = src_file.stem
             manuallist = manuallist + manuals_dir.glob(basename + "*.pdf")
 
@@ -68,7 +69,7 @@ def copy_whitelisted_files(console, dest_dir, base_dir):
 
         for f in whitelist:
             dest_file = pathlib.Path(console_dest_dir, f)
-            src_file = pathlib.Path(base_dir, console, f)
+            src_file = pathlib.Path(console_src_dir, f)
 
             dest_hash = ""
             src_hash = get_hash(src_file)
