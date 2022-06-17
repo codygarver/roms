@@ -129,7 +129,7 @@ def generate_lists(console, base_dir):
         filter(lambda v: re.match(ignored_extensions_regex, v), filelist))
 
     # Blacklist [b], (Beta), [BIOS], (Demo), (Pirate), (Program), (Proto), and (Sample)
-    regex_bios = ".*[Aa]ction.*[Rr]eplay.*|.*Bible.*|.*Cheat.*Code.*|.*Demo.*(CD|Disc).*|.*Game.*Boy.*Camera.*|.*Game[Ss]hark.*|.*InfoGenius.*|.*Personal.*Organizer.*|.*Preview.*|.*Sewing.*Machine.*Operation.*Software.*|.*System.*Kiosk.*|.*[Bb][Ii][Oo][Ss].*|.*\(.*Beta.*\).*|.*\(.*Debug.*\).*|.*\(.*Demo.*\).*|.*\(.*Pirate.*\).*|.*\(.*Program.*\).*|.*\(.*Proto.*\).*|.*\(.*Sample.*\).*|.*\[b\].*"
+    regex_bios = ".*[Aa]ction.*[Rr]eplay.*|.*Bible.*|.*Cheat.*Code.*|.*Demo.*(CD|Disc).*|.*e\-Reader.*|.*Game.*Boy.*Camera.*|.*Game[Ss]hark.*|.*InfoGenius.*|.*Personal.*Organizer.*|.*Preview.*|.*Sewing.*Machine.*Operation.*Software.*|.*System.*Kiosk.*|.*[Bb][Ii][Oo][Ss].*|.*\(.*Beta.*\).*|.*\(.*Debug.*\).*|.*\(.*Demo.*\).*|.*\(.*Pirate.*\).*|.*\(.*Program.*\).*|.*\(.*Proto.*\).*|.*\(.*Sample.*\).*|.*\[b\].*"
     bios_list = list(
         filter(lambda v: re.match(regex_bios, v), filelist))
 
