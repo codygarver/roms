@@ -2,76 +2,63 @@
 
 import argparse
 import copy
-import glob
 import hashlib
 import logging
 import os
 import pathlib
 import re
 import shutil
-import sys
 
 
 def copy_whitelisted_files(console, dest_dir, base_dir):
-    console_dest_dir = dest_dir + "/" + console
-    whitelist_file = base_dir + "/" + console + "/whitelist.auto.txt"
+    console_dest_dir = pathlib.Path(dest_dir, console)
 
     # Prompt to create console dir
-    if not os.path.isdir(console_dest_dir):
+    if not console_dest_dir.is_dir():
         create_dir(console, console_dest_dir)
 
-    with open(whitelist_file) as f:
-        whitelist = f.read().splitlines()
+    whitelist_file = pathlib.Path(base_dir, console, "whitelist.auto.txt")
+    whitelist = whitelist_file.read_text().splitlines()
 
     # Copy whitelisted games' images to destination if they exist
-    images_dir = base_dir + "/" + console + "/images/"
-    imagelist = []
-    if not args.no_images and os.path.isdir(images_dir):
+    images_dir = pathlib.Path(base_dir, console, "images")
+    if not args.no_images and images_dir.is_dir():
+        imagelist = []
         for f in whitelist:
-            src_file = os.path.join(base_dir + "/" + console, f.rstrip())
-            basename = os.path.splitext(f.rstrip())[0]
-            images = glob.glob(images_dir + basename + "*.png")
-            for i in images:
-                image = os.path.basename(i)
-                imagelist = imagelist + ["images/" + image]
+            src_file = pathlib.Path(base_dir, console, f)
+            basename = src_file.stem
+            imagelist = imagelist + images_dir.glob(basename + "*.png")
 
-        if len(imagelist) >= 1 and not os.path.isdir(console_dest_dir + "/images"):
-            os.mkdir(console_dest_dir + "/images")
-    elif not os.path.isdir(images_dir):
-        logging.warning(
-            console + ": not copying images because dir does not exist: " + images_dir)
-
-    if len(imagelist) >= 1:
-        whitelist = sorted(
-            list(dict.fromkeys(whitelist + imagelist)))
+        if imagelist:
+            whitelist = sorted(
+                list(dict.fromkeys(whitelist + imagelist)))
+            images_dest_dir = pathlib.Path(console_dest_dir, "images")
+            images_dest_dir.mkdir(parents=True, exist_ok=True)
 
     # Copy whitelisted games' manuals to destination if they exist
-    manuals_dir = base_dir + "/" + console + "/manuals/"
-    manuallist = []
-    if not args.no_manuals and os.path.isdir(manuals_dir):
+    manuals_dir = pathlib.Path(base_dir, console, "manuals")
+    if not args.no_manuals and manuals_dir.is_dir():
+        manuallist = []
         for f in whitelist:
-            src_file = os.path.join(base_dir + "/" + console, f.rstrip())
-            basename = os.path.splitext(f.rstrip())[0]
-            manuals = glob.glob(manuals_dir + basename + "*.pdf")
-            for m in manuals:
-                manual = os.path.basename(m)
-                manuallist = manuallist + ["manuals/" + manual]
+            src_file = pathlib.Path(base_dir, console, f)
+            basename = src_file.stem
+            manuallist = manuallist + manuals_dir.glob(basename + "*.pdf")
 
-        if len(manuallist) >= 1 and not os.path.isdir(console_dest_dir + "/manuals"):
-            os.mkdir(console_dest_dir + "/manuals")
+        if manuallist:
+            whitelist = sorted(
+                list(dict.fromkeys(whitelist + manuallist)))
+            manuals_dest_dir = pathlib.Path(console_dest_dir, "manuals")
+            manuals_dest_dir.mkdir(parents=True, exist_ok=True)
 
-    elif not os.path.isdir(manuals_dir):
+    elif not manuals_dir.is_dir():
         logging.warning(
-            console + ": not copying manuals because dir does not exist: " + manuals_dir)
-
-    if len(manuallist) >= 1:
-        whitelist = sorted(
-            list(dict.fromkeys(whitelist + manuallist)))
+            console + ": not copying manuals because dir does not exist: " +
+            str(manuals_dir))
 
     # Copy whitelisted destination files
-    if len(whitelist) >= 1:
+    if whitelist:
         logging.info(console + ": updating whitelisted files in " +
-                     console_dest_dir + ", large files may take a while...")
+                     str(console_dest_dir) + ", large files may take a while...")
 
         def get_hash(file):
             file_hash = hashlib.blake2b(pathlib.Path(
@@ -80,34 +67,32 @@ def copy_whitelisted_files(console, dest_dir, base_dir):
             return file_hash
 
         for f in whitelist:
-            dest_file = os.path.join(console_dest_dir + "/" + f.rstrip())
-            src_file = os.path.join(
-                base_dir + "/" + console + "/" + f.rstrip())
+            dest_file = pathlib.Path(console_dest_dir, f)
+            src_file = pathlib.Path(base_dir, console, f)
 
             dest_hash = ""
             src_hash = get_hash(src_file)
-            if os.path.isfile(dest_file):
+            if dest_file.is_file():
                 dest_hash = get_hash(dest_file)
 
-            if not os.path.isfile(dest_file) or dest_hash != src_hash:
+            if not dest_file.is_file() or dest_hash != src_hash:
                 shutil.copy2(src_file, dest_file)
 
                 dest_hash = get_hash(dest_file)
 
                 if dest_hash == src_hash:
-                    logging.info(console + ": copied " +
-                                 os.path.basename(f.rstrip()))
+                    logging.info(console + ": copied " + dest_file.name)
                 else:
                     logging.critical(console + ": hash sum mismatch (I/O error?), exiting!: " +
-                                     f.rstrip())
+                                     dest_file.name)
             elif dest_hash == src_hash:
-                logging.info(console + ": verified " +
-                             os.path.basename(f.rstrip()))
+                logging.info(console + ": verified " + dest_file.name)
 
     logging.info(console + ": whitelisted destination files are up-to-date")
 
 
 def create_dir(console, path):
+    path = str(path)
 
     def mkdir(path):
         os.mkdir(path)
@@ -133,47 +118,40 @@ def create_dir(console, path):
 
 
 def delete_blacklisted_files(console, dest_dir, base_dir):
-    blacklist_file = base_dir + "/" + console + "/blacklist.auto.txt"
-    console_dest_dir = dest_dir + "/" + console
+    blacklist_file = pathlib.Path(base_dir, console, "blacklist.auto.txt")
+    blacklist = blacklist_file.read_text().splitlines()
+    console_dest_dir = pathlib.Path(dest_dir, console)
 
     # Confirm final destinaton exists
-    if not os.path.isdir(console_dest_dir):
+    if not console_dest_dir.is_dir():
         logging.critical(console + ": path does NOT exist, exiting!: " +
-                         console_dest_dir)
+                         str(console_dest_dir))
         exit(1)
 
     # Get list of destination files
-    dest_files = [f for f in os.listdir(
-        console_dest_dir) if os.path.isfile(os.path.join(console_dest_dir, f))]
-
-    with open(blacklist_file) as f:
-        blacklist = f.read().splitlines()
+    dest_files = [f.name for f in console_dest_dir.glob(
+        "*") if f.is_file()]
 
     # Delete blacklisted destination files
     delete_files = [item for item in blacklist if item in dest_files]
     for f in delete_files:
-        file_name = os.path.join(console_dest_dir, f.rstrip())
-        try:
-            os.remove(file_name)
-            logging.info(console + ": deleted " +
-                         f.rstrip())
-        except OSError as e:
-            if e.errno != errno.ENOENT:  # Ignore "No such file or directory"
-                raise
+        pathlib.Path(console_dest_dir, f).unlink(missing_ok=True)
+        logging.info(
+            console + ": deleted " + f)
 
     logging.info(console + ": blacklisted destination files are up-to-date")
 
 
 def generate_lists(console, base_dir):
-    console_path = base_dir + "/" + console
+    console_path = pathlib.Path(base_dir, console)
 
     # Prompt to create console dir
-    if not os.path.isdir(console_path):
+    if not console_path.is_dir():
         create_dir(console, console_path)
 
     # Initial list of files in console dir
-    filelist = [f for f in os.listdir(
-        console_path) if os.path.isfile(os.path.join(console_path, f))]
+    filelist = [f.name for f in console_path.glob(
+        "*") if f.is_file()]
 
     # Remove ignored files by extension
     ignored_extensions_regex = "(?!\..*$)(?!.*\.auto$)(?!.*\.png$)(?!.*\.sql$)(?!.*\.srm$)(?!.*\.torrent$)(?!.*\.txt$)(?!.*\.xml$)"
@@ -315,10 +293,9 @@ def generate_lists(console, base_dir):
             blacklist = blacklist + [game_file]
 
     # Add blacklist custom (if it exists) to blacklist auto
-    blacklist_custom_path = console_path + "/blacklist.custom.txt"
-    if os.path.exists(blacklist_custom_path):
-        with open(blacklist_custom_path) as blacklist_custom:
-            blacklist = blacklist + blacklist_custom.read().splitlines()
+    blacklist_custom_path = pathlib.Path(console_path, "blacklist.custom.txt")
+    if blacklist_custom_path.is_file():
+        blacklist = blacklist + blacklist_custom_path.read_text().splitlines()
 
     # Alphabetize and remove duplicates
     blacklist = sorted(
@@ -328,10 +305,9 @@ def generate_lists(console, base_dir):
     whitelist = [item for item in whitelist if item not in blacklist]
 
     # Add whitelist custom (if it exists) to whitelist auto
-    whitelist_custom_path = console_path + "/whitelist.custom.txt"
-    if os.path.exists(whitelist_custom_path):
-        with open(whitelist_custom_path) as whitelist_custom:
-            whitelist = whitelist + whitelist_custom.read().splitlines()
+    whitelist_custom_path = pathlib.Path(console_path, "whitelist.custom.txt")
+    if whitelist_custom_path.is_file():
+        whitelist = whitelist + whitelist_custom_path.read_text().splitlines()
 
     # Alphabetize and remove duplicates
     whitelist = sorted(
@@ -341,17 +317,19 @@ def generate_lists(console, base_dir):
     blacklist = [item for item in blacklist if item not in whitelist]
 
     # Write whitelist to file
-    whitelist_path = console_path + "/whitelist.auto.txt"
-    with open(whitelist_path, "w") as white_file:
+    whitelist_path = pathlib.Path(console_path, "whitelist.auto.txt")
+    whitelist_path.unlink(missing_ok=True)
+    with whitelist_path.open('a') as whitelist_file:
         for file_line in whitelist:
-            white_file.write('%s\n' % file_line)
+            whitelist_file.write(file_line + "\n")
     logging.info(console + ": whitelist generated")
 
     # Write blacklist to file
-    blacklist_path = console_path + "/blacklist.auto.txt"
-    with open(blacklist_path, "w") as black_file:
+    blacklist_path = pathlib.Path(console_path, "blacklist.auto.txt")
+    blacklist_path.unlink(missing_ok=True)
+    with blacklist_path.open('a') as blacklist_file:
         for file_line in blacklist:
-            black_file.write('%s\n' % file_line)
+            blacklist_file.write(file_line + "\n")
     logging.info(console + ": blacklist generated")
 
 
@@ -371,8 +349,8 @@ if __name__ == "__main__":
     parser.add_argument("--console-name", required=True)
     parser.add_argument("--destination-dir")
     parser.add_argument("--initialize", action='store_true')
-    parser.add_argument("--no-combos", action='store_true')
     parser.add_argument("--no-boardgames", action='store_true')
+    parser.add_argument("--no-combos", action='store_true')
     parser.add_argument("--no-gba-videos", action='store_true')
     parser.add_argument("--no-images", action='store_true')
     parser.add_argument("--no-kids", action='store_true')
@@ -383,9 +361,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if not args.base_dir:
+        base_dir = str(pathlib.Path.cwd())
         logging.warning(
-            "missing --base-dir argument, falling back to current working directory (" + os.getcwd() + ")!")
-        base_dir = os.getcwd()
+            "missing --base-dir argument, falling back to current working directory (" + base_dir + ")!")
     else:
         base_dir = args.base_dir
 
